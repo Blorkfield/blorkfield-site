@@ -1,7 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
+import OverlayCanvas from '../components/OverlayCanvas.svelte';
 ---
 <BaseLayout headerText="Blorkfield">
-  <Hero title="Welcome to Blorkfield" tagline="Build stuff" />
+  <div class="canvas-wrapper">
+    <OverlayCanvas client:load />
+  </div>
 </BaseLayout>
+
+<style>
+  .canvas-wrapper {
+    height: auto;
+  }
+</style>

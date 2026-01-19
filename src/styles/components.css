@@ -4,7 +4,8 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 1.5rem 3rem;
-	border-bottom: 2px solid var(--bg-card);
+	background: var(--bg-card);
+	border-bottom: 2px solid var(--text-muted);
 }
 .site-header__title {
 	font-size: 1.5rem;
@@ -18,10 +19,7 @@
 }
 /* Main Content */
 .main {
-	padding: 3rem;
-	width: 80vw;
-	margin: 0 auto;
-	flex-grow: 1;
+	flex: 1;
 }
 /* Hero Section */
 .hero {
@@ -44,7 +42,8 @@
 	text-align: center;
 	padding: 2rem;
 	color: var(--text-muted);
-	border-top: 3px solid var(--bg-card);
+	background: var(--bg-card);
+	border-top: 2px solid var(--text-muted);
 }
 /* Login Button */
 .login-btn {
