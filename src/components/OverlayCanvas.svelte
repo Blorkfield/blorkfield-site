@@ -9,36 +9,36 @@
 
   // Layout constants
   const WELCOME_Y = 80;
-  const BUILD_STUFF_Y = WELCOME_Y + 90;
-  const CONTENT_BOX_TOP = BUILD_STUFF_Y + 100;
+  const VERTICAL_GAP = 30;
   const FLOOR_PADDING = 60;
 
   onMount(async () => {
     await new Promise(r => setTimeout(r, 10));
 
-    const contentBoxHeight = contentBox.offsetHeight;
-    const totalHeight = CONTENT_BOX_TOP + contentBoxHeight + FLOOR_PADDING;
-
-    wrapper.style.height = `${totalHeight}px`;
-
     const width = container.clientWidth;
-    const height = totalHeight;
+    const centerX = width * 0.5;
 
+    // Create canvas with temporary height, will resize after calculating layout
     const canvas = document.createElement('canvas');
     canvas.width = width;
-    canvas.height = height;
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     container.appendChild(canvas);
 
+    // Temporary height for initial scene creation
+    const tempHeight = 1000;
+    canvas.height = tempHeight;
+
     scene = new OverlayScene(canvas, {
-      bounds: { top: 0, bottom: height, left: 0, right: width },
+      bounds: { top: 0, bottom: tempHeight, left: 0, right: width },
       gravity: 1,
       wrapHorizontal: true,
       background: '#1a1b26',
       floorConfig: {
         segments: 10,
-        threshold: 100
+        threshold: 100,
+        thickness: 4,
+        color: '#565f89'
       },
       despawnBelowFloor: 0.5
     });
@@ -50,12 +50,12 @@
 
     await scene.initializeFonts('/fonts/');
 
-    const welcomeX = width * 0.3;
-
-    await scene.addTextObstacles({
+    // "Welcome to Blorkfield" - centered
+    const welcomeResult = await scene.addTextObstacles({
       text: 'Welcome to Blorkfield',
-      x: welcomeX,
+      x: centerX,
       y: WELCOME_Y,
+      align: 'center',
       letterSize: 60,
       pressureThreshold: { value: 9 },
       weight: { value: 10 },
@@ -64,13 +64,19 @@
       tags: ['grabable']
     });
 
+    // "Build Stuff" - left-aligned with Welcome text
     const robotoFont = scene.getAvailableFonts().find(f => f.name === 'Roboto');
+    const buildFontSize = 40;
+    const buildY = welcomeResult.bounds.bottom + VERTICAL_GAP + (buildFontSize * 0.8);
+    let buildBottom = buildY + buildFontSize * 0.2;
+
     if (robotoFont?.fontUrl) {
-      await scene.addTTFTextObstacles({
+      const buildResult = await scene.addTTFTextObstacles({
         text: 'Build Stuff',
-        x: welcomeX,
-        y: BUILD_STUFF_Y,
-        fontSize: 40,
+        x: welcomeResult.bounds.left,
+        y: buildY,
+        align: 'left',
+        fontSize: buildFontSize,
         fontUrl: robotoFont.fontUrl,
         fillColor: '#8BA4C7',
         pressureThreshold: { value: 9 },
@@ -79,25 +85,32 @@
         clickToFall: { clicks: 2 },
         tags: ['grabable']
       });
+      buildBottom = buildResult.bounds.bottom;
     }
 
+    // Content box - centered, below Build Stuff
     const boxRect = contentBox.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const boxX = boxRect.left - containerRect.left + boxRect.width / 2;
-    const boxY = boxRect.top - containerRect.top + boxRect.height / 2;
+    const boxX = centerX;
+    const boxY = buildBottom + VERTICAL_GAP + boxRect.height / 2;
 
     scene.spawnObject({
+      element: contentBox,
       x: boxX,
       y: boxY,
       width: boxRect.width,
       height: boxRect.height,
-      fillStyle: 'transparent',
       tags: ['content-obstacle', 'grabable'],
       pressureThreshold: { value: 100 },
-      weight: { value: 1000 },
-      shadow: true,
+      weight: 1000 ,
+      shadow: { opacity: 0.3 },
       clickToFall: { clicks: 10 }
     });
+
+    // Calculate final height and resize
+    const totalHeight = boxY + boxRect.height / 2 + FLOOR_PADDING;
+    wrapper.style.height = `${totalHeight}px`;
+    canvas.height = totalHeight;
+    scene.resize(width, totalHeight);
 
     const rainConfig: RainEffectConfig = {
       id: 'rain',
@@ -139,7 +152,7 @@
 
 <div class="overlay-wrapper" bind:this={wrapper}>
   <div class="overlay-container" bind:this={container}></div>
-  <div class="content-box" bind:this={contentBox} style="top: {CONTENT_BOX_TOP}px;">
+  <div class="content-box" bind:this={contentBox}>
     <h2>What We Do</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 
@@ -179,6 +192,7 @@
 
   .content-box {
     position: absolute;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 500px;
