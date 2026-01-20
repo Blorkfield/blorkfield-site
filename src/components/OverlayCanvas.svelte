@@ -40,7 +40,7 @@
         thickness: 4,
         color: '#565f89'
       },
-      despawnBelowFloor: 0.5
+      despawnBelowFloor: 5.0
     });
 
     canvas.addEventListener('mousemove', (e) => {
@@ -180,6 +180,7 @@
   .overlay-wrapper {
     position: relative;
     width: 100%;
+    overflow: hidden;
   }
 
   .overlay-container {
