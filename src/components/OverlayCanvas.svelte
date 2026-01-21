@@ -187,16 +187,16 @@
   <div class="overlay-container" bind:this={container}></div>
   <div class="content-box" bind:this={contentBox}>
     <h2>What We Do</h2>
-    <p>We build reusable front-end tooling for 2D and 3D applications. Our libraries and components help developers create interactive experiences without reinventing the wheel. We also develop video games and create assets for game development.</p>
+    <p>We build front-end tooling for 2D and 3D applications. Our libraries sit between raw browser APIs and application code—canvas rendering, WebGL pipelines, physics integration, and scene management. The kind of infrastructure you'd otherwise write yourself or cobble together from a dozen unmaintained packages.</p>
 
-    <h2>Our Focus</h2>
-    <p>Our work spans from low-level rendering utilities to complete interactive systems. Whether it's physics-based UI elements, canvas rendering pipelines, or 3D asset management tools, we build the infrastructure that powers creative applications.</p>
+    <h2>Games & Tools</h2>
+    <p>We develop video games and the systems that power them. Sprite batching, collision broadphase, input handling, asset loading—we've built these enough times that we started shipping them as standalone libraries. Everything we release comes out of actual production work, not spec-driven design docs.</p>
 
-    <h2>Current Status</h2>
-    <p>All Blorkfield staff are currently engaged under existing contracts. We are not available for outside work at this time. As contracts conclude, we may open up availability for select projects depending on scheduling and scope.</p>
+    <h2>Architecture</h2>
+    <p>Our tools target the browser runtime but don't assume your stack. No framework lock-in, no build step requirements, minimal dependencies. Tree-shakeable ESM builds, TypeScript definitions, and enough configuration surface to fit into whatever mess you've already got running.</p>
 
-    <h2>Looking Ahead</h2>
-    <p>This site serves as the home for our public-facing work, including tools we release and games we develop. Check out our products page to see what we've shipped, and keep an eye out for future releases.</p>
+    <h2>Open Source</h2>
+    <p>Most of what we build ends up public. Check out the <a href="/products">products page</a> to see what's shipped and what's in progress.</p>
   </div>
 </div>
 
