@@ -10,7 +10,7 @@
   // Layout constants
   const WELCOME_Y = 80;
   const VERTICAL_GAP = 30;
-  const FLOOR_PADDING = 60;
+  const MIN_FLOOR_PADDING = 60; // minimum space below content box
 
   onMount(async () => {
     await new Promise(r => setTimeout(r, 10));
@@ -25,8 +25,9 @@
     canvas.style.height = '100%';
     container.appendChild(canvas);
 
-    // Temporary height for initial scene creation
-    const tempHeight = 1000;
+    // Use small initial height so resize() always EXPANDS bounds (not shrinks)
+    // overlay-core may not handle shrinking floor bounds correctly
+    const tempHeight = 100;
     canvas.height = tempHeight;
 
     scene = new OverlayScene(canvas, {
@@ -37,10 +38,10 @@
       floorConfig: {
         segments: 10,
         threshold: 100,
-        thickness: 4,
+        thickness: 15,
         color: '#565f89'
       },
-      despawnBelowFloor: 5.0
+      despawnBelowFloor: 20.0
     });
 
     canvas.addEventListener('mousemove', (e) => {
@@ -106,8 +107,22 @@
       clickToFall: { clicks: 10 }
     });
 
-    // Calculate final height and resize
-    const totalHeight = boxY + boxRect.height / 2 + FLOOR_PADDING;
+    // Calculate final height based on footer position
+    const footer = document.querySelector('.site-footer');
+    const wrapperRect = wrapper.getBoundingClientRect();
+
+    // Minimum height needed to fit content
+    const minContentHeight = boxY + boxRect.height / 2 + MIN_FLOOR_PADDING;
+
+    // Calculate height to align floor with footer top
+    let totalHeight = minContentHeight;
+    if (footer) {
+      const footerRect = footer.getBoundingClientRect();
+      const heightToFooter = footerRect.top - wrapperRect.top;
+      // Use the larger of content height or footer-aligned height
+      totalHeight = Math.max(minContentHeight, heightToFooter);
+    }
+
     wrapper.style.height = `${totalHeight}px`;
     canvas.height = totalHeight;
     scene.resize(width, totalHeight);
@@ -120,7 +135,8 @@
       objectConfigs: [{
         objectConfig: {
           imageUrl: '/bf_koban_512.png',
-          tags: ['falling', 'grabable']
+          tags: ['falling', 'grabable'],
+          weight: 3
         },
         probability: 1,
         minScale: 1,
@@ -132,16 +148,32 @@
     scene.setEffect(rainConfig);
     scene.start();
 
-    const resizeObserver = new ResizeObserver(() => {
-      if (scene && container) {
-        const newWidth = container.clientWidth;
-        scene.resize(newWidth, totalHeight);
+    const recalculateHeight = () => {
+      if (!scene || !container || !wrapper) return;
+
+      const newWidth = container.clientWidth;
+      const newWrapperRect = wrapper.getBoundingClientRect();
+      const newFooter = document.querySelector('.site-footer');
+
+      let newHeight = minContentHeight;
+      if (newFooter) {
+        const newFooterRect = newFooter.getBoundingClientRect();
+        const heightToFooter = newFooterRect.top - newWrapperRect.top;
+        newHeight = Math.max(minContentHeight, heightToFooter);
       }
-    });
+
+      wrapper.style.height = `${newHeight}px`;
+      canvas.height = newHeight;
+      scene.resize(newWidth, newHeight);
+    };
+
+    const resizeObserver = new ResizeObserver(recalculateHeight);
     resizeObserver.observe(container);
+    window.addEventListener('resize', recalculateHeight);
 
     return () => {
       resizeObserver.disconnect();
+      window.removeEventListener('resize', recalculateHeight);
     };
   });
 
@@ -154,25 +186,16 @@
   <div class="overlay-container" bind:this={container}></div>
   <div class="content-box" bind:this={contentBox}>
     <h2>What We Do</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <p>We build reusable front-end tooling for 2D and 3D applications. Our libraries and components help developers create interactive experiences without reinventing the wheel. We also develop video games and create assets for game development.</p>
 
-    <h2>Our Mission</h2>
-    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+    <h2>Our Focus</h2>
+    <p>Our work spans from low-level rendering utilities to complete interactive systems. Whether it's physics-based UI elements, canvas rendering pipelines, or 3D asset management tools, we build the infrastructure that powers creative applications.</p>
 
-    <h2>Why Choose Us</h2>
-    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+    <h2>Current Status</h2>
+    <p>All Blorkfield staff are currently engaged under existing contracts. We are not available for outside work at this time. As contracts conclude, we may open up availability for select projects depending on scheduling and scope.</p>
 
-    <h2>Our Approach</h2>
-    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
-
-    <h2>Get Started Today</h2>
-    <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
-
-    <h2>Our Services</h2>
-    <p>Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-
-    <h2>Contact Us</h2>
-    <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+    <h2>Looking Ahead</h2>
+    <p>This site serves as the home for our public-facing work, including tools we release and games we develop. Check out our products page to see what we've shipped, and keep an eye out for future releases.</p>
   </div>
 </div>
 
