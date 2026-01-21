@@ -1,3 +1,9 @@
+html {
+	scrollbar-width: none;
+}
+html::-webkit-scrollbar {
+	display: none;
+}
 body {
 	font-family: system-ui, -apple-system, sans-serif;
 	background-color: var(--bg-dark);
