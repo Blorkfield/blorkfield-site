@@ -12,8 +12,8 @@ importers:
         specifier: ^7.2.4
         version: 7.2.5(astro@5.16.11(rollup@4.55.1)(typescript@5.9.3))(svelte@5.46.4)(typescript@5.9.3)
       '@blorkfield/overlay-core':
-        specifier: link:../overlay-core
-        version: link:../overlay-core
+        specifier: 0.5.7
+        version: 0.5.7
       astro:
         specifier: ^5.16.6
         version: 5.16.11(rollup@4.55.1)(typescript@5.9.3)
@@ -71,6 +71,9 @@ packages:
   '@babel/types@7.28.6':
     resolution: {integrity: sha512-0ZrskXVEHSWIqZM/sQZ4EV3jZJXRkio/WCxaqKZP1g//CEWEPSfeZFcms4XeKBCHU0ZKnIkdJeU/kF+eRp5lBg==}
     engines: {node: '>=6.9.0'}
+
+  '@blorkfield/overlay-core@0.5.7':
+    resolution: {integrity: sha512-Q87lRCHg1dzlxW2VGTlMB4WFTeSQojp1uspQPJZM6naHxoj6WbLYHoEHVvRU91uXJnn9jKHCk1Emx6TnZTx0VA==}
 
   '@capsizecss/unpack@4.0.0':
     resolution: {integrity: sha512-VERIM64vtTP1C4mxQ5thVT9fK0apjPFobqybMtA1UdUujWka24ERHbRHFGmpbbhp73MhV+KSsHQH9C6uOTdEQA==}
@@ -976,6 +979,9 @@ packages:
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
 
+  matter-js@0.19.0:
+    resolution: {integrity: sha512-v2huwvQGOHTGOkMqtHd2hercCG3f6QAObTisPPHg8TZqq2lz7eIY/5i/5YUV8Ibf3mEioFEmwibcPUF2/fnKKQ==}
+
   mdast-util-definitions@6.0.0:
     resolution: {integrity: sha512-scTllyX6pnYNZH/AIp/0ePz6s4cZtARxImwoPJ7kS42n+MnVsI4XbnG6d4ibehRIldYMWM2LD7ImQblVhUejVQ==}
 
@@ -1149,6 +1155,11 @@ packages:
   oniguruma-to-es@4.3.4:
     resolution: {integrity: sha512-3VhUGN3w2eYxnTzHn+ikMI+fp/96KoRSVK9/kMTcFqj1NRDh2IhQCKvYxDnWePKRXY/AqH+Fuiyb7VHSzBjHfA==}
 
+  opentype.js@1.3.4:
+    resolution: {integrity: sha512-d2JE9RP/6uagpQAVtJoF0pJJA/fgai89Cc50Yp0EJHk+eLp6QQ7gBoblsnubRULNY132I0J1QKMJ+JTbMqz4sw==}
+    engines: {node: '>= 8.0.0'}
+    hasBin: true
+
   p-limit@6.2.0:
     resolution: {integrity: sha512-kuUqqHNUqoIWp/c467RI4X6mmyuojY5jGutNU0wVTmEOOfcuwLqyMVoAi9MKi2Ak+5i9+nhmrK4ufZE8069kHA==}
     engines: {node: '>=18'}
@@ -1304,6 +1315,9 @@ packages:
   string-width@7.2.0:
     resolution: {integrity: sha512-tsaTIkKW9b4N+AEj+SVA+WhJzV7/zMhcSu78mLKWSk7cXMOSHsBKFWUs0fWwq8QyK3MgJBQRX6Gbi4kYbdvGkQ==}
     engines: {node: '>=18'}
+
+  string.prototype.codepointat@0.2.1:
+    resolution: {integrity: sha512-2cBVCj6I4IOvEnjgO/hWqXjqBGsY+zwPmHl12Srk9IXSZ56Jwwmy+66XO5Iut/oQVR7t5ihYdLB0GMa4alEUcg==}
 
   stringify-entities@4.0.4:
     resolution: {integrity: sha512-IwfBptatlO+QCJUo19AqvrPNqlVMpW9YEL2LIVY+Rpv2qsjCGxaDLNRgeGsQWJhfItebuJhsGSLjaBbNSQ+ieg==}
@@ -1671,6 +1685,12 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
+
+  '@blorkfield/overlay-core@0.5.7':
+    dependencies:
+      matter-js: 0.19.0
+      opentype.js: 1.3.4
+      sirv: 3.0.2
 
   '@capsizecss/unpack@4.0.0':
     dependencies:
@@ -2537,6 +2557,8 @@ snapshots:
 
   markdown-table@3.0.4: {}
 
+  matter-js@0.19.0: {}
+
   mdast-util-definitions@6.0.0:
     dependencies:
       '@types/mdast': 4.0.4
@@ -2890,6 +2912,11 @@ snapshots:
       regex: 6.1.0
       regex-recursion: 6.0.2
 
+  opentype.js@1.3.4:
+    dependencies:
+      string.prototype.codepointat: 0.2.1
+      tiny-inflate: 1.0.3
+
   p-limit@6.2.0:
     dependencies:
       yocto-queue: 1.2.2
@@ -3149,6 +3176,8 @@ snapshots:
       emoji-regex: 10.6.0
       get-east-asian-width: 1.4.0
       strip-ansi: 7.1.2
+
+  string.prototype.codepointat@0.2.1: {}
 
   stringify-entities@4.0.4:
     dependencies:

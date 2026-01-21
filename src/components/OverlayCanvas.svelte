@@ -39,9 +39,10 @@
         segments: 10,
         threshold: 100,
         thickness: 15,
+        visibleThickness: 4,
         color: '#565f89'
       },
-      despawnBelowFloor: 20.0
+      despawnBelowFloor: 0.5
     });
 
     canvas.addEventListener('mousemove', (e) => {
