@@ -12,8 +12,8 @@ importers:
         specifier: ^7.2.4
         version: 7.2.5(astro@5.16.11(rollup@4.55.1)(typescript@5.9.3))(svelte@5.46.4)(typescript@5.9.3)
       '@blorkfield/overlay-core':
-        specifier: 0.5.7
-        version: 0.5.7
+        specifier: 0.5.8
+        version: 0.5.8
       astro:
         specifier: ^5.16.6
         version: 5.16.11(rollup@4.55.1)(typescript@5.9.3)
@@ -72,8 +72,8 @@ packages:
     resolution: {integrity: sha512-0ZrskXVEHSWIqZM/sQZ4EV3jZJXRkio/WCxaqKZP1g//CEWEPSfeZFcms4XeKBCHU0ZKnIkdJeU/kF+eRp5lBg==}
     engines: {node: '>=6.9.0'}
 
-  '@blorkfield/overlay-core@0.5.7':
-    resolution: {integrity: sha512-Q87lRCHg1dzlxW2VGTlMB4WFTeSQojp1uspQPJZM6naHxoj6WbLYHoEHVvRU91uXJnn9jKHCk1Emx6TnZTx0VA==}
+  '@blorkfield/overlay-core@0.5.8':
+    resolution: {integrity: sha512-bsvPkfa2/l619J2FVguAxUfxKZ0XdwAJOaI2LPzoKzm+xWEG1NqIf/NYPCIWiDocWIE2yRVhlKJtPebpK5cOwg==}
 
   '@capsizecss/unpack@4.0.0':
     resolution: {integrity: sha512-VERIM64vtTP1C4mxQ5thVT9fK0apjPFobqybMtA1UdUujWka24ERHbRHFGmpbbhp73MhV+KSsHQH9C6uOTdEQA==}
@@ -1686,7 +1686,7 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@blorkfield/overlay-core@0.5.7':
+  '@blorkfield/overlay-core@0.5.8':
     dependencies:
       matter-js: 0.19.0
       opentype.js: 1.3.4
