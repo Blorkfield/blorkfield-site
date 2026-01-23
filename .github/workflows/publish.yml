@@ -114,10 +114,8 @@ jobs:
             --base main \
             --head "$BRANCH_NAME"
 
-  # Publish Docker image after release PR is merged
+  # Publish Docker image on every push to main
   publish-docker:
-    needs: check-release
-    if: needs.check-release.outputs.is_release_merge == 'true' || github.event.inputs.force_publish == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
