@@ -98,13 +98,7 @@ jobs:
 
           # Create changeset file for blorkfield-homepage
           mkdir -p .changeset
-          cat > "$CHANGESET_PATH" << EOF
----
-"blorkfield-homepage": $BUMP
----
-
-${{ steps.parse.outputs.title }}
-EOF
+          printf '%s\n' "---" "\"blorkfield-homepage\": $BUMP" "---" "" "${{ steps.parse.outputs.title }}" > "$CHANGESET_PATH"
 
           echo "Created changeset: $CHANGESET_PATH"
           cat "$CHANGESET_PATH"
