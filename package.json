@@ -2,11 +2,13 @@
   "name": "blorkfield-homepage",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@10.27.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "typecheck": "astro check"
   },
   "dependencies": {
     "@astrojs/svelte": "^7.2.4",
@@ -16,6 +18,8 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@changesets/cli": "^2.27.12",
     "sirv": "^3.0.2"
   }
 }

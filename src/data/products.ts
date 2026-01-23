@@ -1,6 +1,13 @@
 import type { Product } from "../types/product";
 
 export const products: Product[] = [
+    {
+    id: "overlay",
+    title: "Overlay Core",
+    bannerImage: "overlay_core.png",
+    description: "2d overlay created using TypeScript and Matter.js",
+    link: "https://overlay.blorkfield.com"
+  },
   {
     id: "debugger",
     title: "Asset Debugger",
