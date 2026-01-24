@@ -8,7 +8,9 @@
 	export let modalWidth: number = 95;
 	export let modalHeight: number = 95;
 
-	$: linkLabel = new URL(item.link).hostname;
+	// Determine which link to use for the button: link → npmPackage → repository → none
+	$: buttonLink = item.link ?? item.npmPackage ?? item.repository ?? null;
+	$: buttonLabel = buttonLink ? new URL(buttonLink).hostname : null;
 
 	let isOpen = false;
 
@@ -38,15 +40,17 @@
 	{/if}
 	<div class="card__content">
 		<h2 class="card__title">{item.title}</h2>
-		<a
-			href={item.link}
-			target="_blank"
-			rel="noopener noreferrer"
-			class="card__link"
-			on:click={handleLinkClick}
-		>
-			{linkLabel} →
-		</a>
+		{#if buttonLink}
+			<a
+				href={buttonLink}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="card__link"
+				on:click={handleLinkClick}
+			>
+				{buttonLabel} →
+			</a>
+		{/if}
 	</div>
 </div>
 

@@ -13,13 +13,25 @@
       onClose: () => void;
   } = $props();
 
+  // Determine which link to use for the main button: link → npmPackage → repository → none
+  let buttonLink = $derived(item.link ?? item.npmPackage ?? item.repository ?? null);
+
+  // Track which field is promoted to the button so we can hide it from secondary links
+  let promotedField = $derived.by(() => {
+    if (item.link) return 'link';
+    if (item.npmPackage) return 'npmPackage';
+    if (item.repository) return 'repository';
+    return null;
+  });
+
   let linkLabel = $derived.by(() => {
-    try{
-      return new URL(item.link).hostname
+    if (!buttonLink) return null;
+    try {
+      return new URL(buttonLink).hostname;
     } catch {
-      return item.link;
+      return buttonLink;
     }
-  });  
+  });
 
   let dockerPullCommand = $derived.by(() => {
     if (!item.dockerImage) {
@@ -27,6 +39,11 @@
     }
     return `docker pull ${item.dockerImage}`;
   });
+
+  // Show secondary links only if they weren't promoted to the main button
+  let showRepository = $derived(item.repository && promotedField !== 'repository');
+  let showNpmPackage = $derived(item.npmPackage && promotedField !== 'npmPackage');
+  let hasSecondaryLinks = $derived(showRepository || showNpmPackage || item.dockerImage);
 
 	function handleBackdropClick(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
@@ -53,17 +70,19 @@
 		<div class="modal__content">
 			<h1 class="modal__title">{item.title}</h1>
 			<p class="modal__description">{item.description}</p>
-			<a href={item.link} target="_blank" rel="noopener noreferrer" class="modal__link">
-				{linkLabel}
-			</a>
-      {#if item.repository || item.npmPackage || item.dockerImage}
+			{#if buttonLink}
+				<a href={buttonLink} target="_blank" rel="noopener noreferrer" class="modal__link">
+					{linkLabel}
+				</a>
+			{/if}
+      {#if hasSecondaryLinks}
         <div class="modal__secondary-links">
-          {#if item.repository}
+          {#if showRepository}
             <a href={item.repository} target="_blank" rel="noopener noreferrer">
-            Repositiory →
+            Repository →
             </a>
           {/if}
-          {#if item.npmPackage}
+          {#if showNpmPackage}
             <a href={item.npmPackage} target="_blank" rel="noopener noreferrer">
             NPM Package →
             </a>
@@ -73,9 +92,9 @@
               <div class="docker-block__label">Docker Image</div>
               <div class="docker-block__code">
                 <code>{dockerPullCommand}</code>
-                <button 
-                  class="docker-block__copy" 
-                  onclick={() => navigator.clipboard.writeText(dockerPullCommand)} 
+                <button
+                  class="docker-block__copy"
+                  onclick={() => navigator.clipboard.writeText(dockerPullCommand)}
                   aria-label="Copy Docker pull command"
                 >
                 Copy
