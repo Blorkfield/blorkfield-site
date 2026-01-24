@@ -1,15 +1,18 @@
 <script lang="ts">
 	import type { CardItem } from "../types/card-item";
+	import type { Product } from "../types/product";
 	import Modal from "./Modal.svelte";
 	import Portal from "./Portal.svelte";
 
-	export let item: CardItem;
+	export let item: CardItem | Product;
 	export let bannerRatio: number = 33.33;
 	export let modalWidth: number = 95;
 	export let modalHeight: number = 95;
 
 	// Determine which link to use for the button: link → npmPackage → repository → none
-	$: buttonLink = item.link ?? item.npmPackage ?? item.repository ?? null;
+	$: npmPackage = 'npmPackage' in item ? item.npmPackage : undefined;
+	$: repository = 'repository' in item ? item.repository : undefined;
+	$: buttonLink = item.link ?? npmPackage ?? repository ?? null;
 	$: buttonLabel = buttonLink ? new URL(buttonLink).hostname : null;
 
 	let isOpen = false;

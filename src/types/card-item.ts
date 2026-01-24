@@ -4,7 +4,4 @@ export interface CardItem {
 	bannerImage?: string;
 	description: string;
 	link?: string;
-	repository?: string;
-	npmPackage?: string;
-	dockerImage?: string;
 }

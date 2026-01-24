@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CardItem } from "../types/card-item";
+	import type { Product } from "../types/product";
 
   let {
       item,
@@ -7,20 +8,25 @@
       modalHeight = 95,
       onClose
   }: {
-      item: CardItem;
+      item: CardItem | Product;
       modalWidth?: number;
       modalHeight?: number;
       onClose: () => void;
   } = $props();
 
+  // Extract product-specific fields if present
+  let npmPackage = $derived('npmPackage' in item ? item.npmPackage : undefined);
+  let repository = $derived('repository' in item ? item.repository : undefined);
+  let dockerImage = $derived('dockerImage' in item ? item.dockerImage : undefined);
+
   // Determine which link to use for the main button: link → npmPackage → repository → none
-  let buttonLink = $derived(item.link ?? item.npmPackage ?? item.repository ?? null);
+  let buttonLink = $derived(item.link ?? npmPackage ?? repository ?? null);
 
   // Track which field is promoted to the button so we can hide it from secondary links
   let promotedField = $derived.by(() => {
     if (item.link) return 'link';
-    if (item.npmPackage) return 'npmPackage';
-    if (item.repository) return 'repository';
+    if (npmPackage) return 'npmPackage';
+    if (repository) return 'repository';
     return null;
   });
 
@@ -34,16 +40,16 @@
   });
 
   let dockerPullCommand = $derived.by(() => {
-    if (!item.dockerImage) {
+    if (!dockerImage) {
       return "";
     }
-    return `docker pull ${item.dockerImage}`;
+    return `docker pull ${dockerImage}`;
   });
 
   // Show secondary links only if they weren't promoted to the main button
-  let showRepository = $derived(item.repository && promotedField !== 'repository');
-  let showNpmPackage = $derived(item.npmPackage && promotedField !== 'npmPackage');
-  let hasSecondaryLinks = $derived(showRepository || showNpmPackage || item.dockerImage);
+  let showRepository = $derived(repository && promotedField !== 'repository');
+  let showNpmPackage = $derived(npmPackage && promotedField !== 'npmPackage');
+  let hasSecondaryLinks = $derived(showRepository || showNpmPackage || dockerImage);
 
 	function handleBackdropClick(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
@@ -78,16 +84,16 @@
       {#if hasSecondaryLinks}
         <div class="modal__secondary-links">
           {#if showRepository}
-            <a href={item.repository} target="_blank" rel="noopener noreferrer">
+            <a href={repository} target="_blank" rel="noopener noreferrer">
             Repository →
             </a>
           {/if}
           {#if showNpmPackage}
-            <a href={item.npmPackage} target="_blank" rel="noopener noreferrer">
+            <a href={npmPackage} target="_blank" rel="noopener noreferrer">
             NPM Package →
             </a>
           {/if}
-          {#if item.dockerImage}
+          {#if dockerImage}
             <div class="docker-block">
               <div class="docker-block__label">Docker Image</div>
               <div class="docker-block__code">
