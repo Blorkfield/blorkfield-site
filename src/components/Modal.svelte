@@ -25,7 +25,7 @@
     if (!item.dockerImage) {
       return "";
     }
-    return "docker pull ${item.dockerImage}";
+    return `docker pull ${item.dockerImage}`;
   });
 
 	function handleBackdropClick(event: MouseEvent) {
@@ -42,9 +42,9 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div class="modal__backdrop" onclick={ () => handleBackdropClick} role="dialog" aria-modal="true">
+<div class="modal__backdrop" onclick={handleBackdropClick} role="dialog" aria-modal="true">
 	<div class="modal__dialog" style="--modal-width: {modalWidth}vw; --modal-height: {modalHeight}vh">
-		<button class="modal__close" onclick={() => onClose} aria-label="Close modal">×</button>
+		<button class="modal__close" onclick={onClose} aria-label="Close modal">×</button>
 		{#if item.bannerImage}
 			<div class="modal__banner">
 				<img src={item.bannerImage} alt={item.title} />
@@ -59,12 +59,12 @@
       {#if item.repository || item.npmPackage || item.dockerImage}
         <div class="modal__secondary-links">
           {#if item.repository}
-            <a href=(item.repository) target="_blank" rel="noopener noreferrer">
+            <a href={item.repository} target="_blank" rel="noopener noreferrer">
             Repositiory →
             </a>
           {/if}
           {#if item.npmPackage}
-            <a href=(item.npmPackage) target="_blank" rel="noopener noreferrer">
+            <a href={item.npmPackage} target="_blank" rel="noopener noreferrer">
             NPM Package →
             </a>
           {/if}
