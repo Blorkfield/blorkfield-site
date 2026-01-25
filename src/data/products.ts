@@ -20,5 +20,13 @@ export const products: Product[] = [
     repository: "https://github.com/Blorkfield/blorktools",
     npmPackage: "https://www.npmjs.com/package/@blorkfield/asset-debugger",
     dockerImage: "ghcr.io/blorkfield/asset-debugger:latest"
+  },
+  {
+    id: "tabs",
+    title: "Blork Tabs",
+    bannerImage: "blork_tabs.png",
+    description: "Framework-agnostic tab/panel management system with snapping and docking",
+    repository: "https://github.com/Blorkfield/blork-tabs",
+    npmPackage: "https://www.npmjs.com/package/@blorkfield/blork-tabs"
   }
 ];
