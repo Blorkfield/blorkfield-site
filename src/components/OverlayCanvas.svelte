@@ -36,9 +36,9 @@
       wrapHorizontal: true,
       background: '#1a1b26',
       floorConfig: {
-        segments: 10,
+        segments: 3,
         threshold: 100,
-        thickness: 15,
+        thickness: 50,
         visibleThickness: 4,
         color: '#565f89'
       },
