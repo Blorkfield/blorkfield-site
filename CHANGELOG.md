@@ -1,5 +1,11 @@
 # blorkfield-homepage
 
+## 0.1.1
+
+### Patch Changes
+
+- 94f69cd: fix: update overlay core
+
 ## 0.1.0
 
 ### Minor Changes
