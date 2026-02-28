@@ -1,5 +1,11 @@
 # blorkfield-homepage
 
+## 0.1.3
+
+### Patch Changes
+
+- 749e273: fix: image load
+
 ## 0.1.2
 
 ### Patch Changes
