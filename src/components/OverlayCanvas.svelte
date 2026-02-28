@@ -106,9 +106,20 @@
     // Minimum height needed to fit content
     const minContentHeight = boxY + boxRect.height / 2 + MIN_FLOOR_PADDING;
 
-    wrapper.style.height = `${minContentHeight}px`;
-    canvas.height = minContentHeight;
-    scene.resize(width, minContentHeight);
+    const getAvailableHeight = () => {
+      const header = document.querySelector<HTMLElement>('.site-header');
+      const footer = document.querySelector<HTMLElement>('.site-footer');
+      return window.innerHeight - (header?.offsetHeight ?? 0) - (footer?.offsetHeight ?? 0);
+    };
+
+    const applyHeight = (w: number) => {
+      const h = Math.max(minContentHeight, getAvailableHeight());
+      wrapper.style.height = `${h}px`;
+      canvas.height = h;
+      scene!.resize(w, h);
+    };
+
+    applyHeight(width);
 
     const rainConfig: RainEffectConfig = {
       id: 'rain',
@@ -133,11 +144,7 @@
 
     const recalculateHeight = () => {
       if (!scene || !container || !wrapper) return;
-
-      const newWidth = container.clientWidth;
-      wrapper.style.height = `${minContentHeight}px`;
-      canvas.height = minContentHeight;
-      scene.resize(newWidth, minContentHeight);
+      applyHeight(container.clientWidth);
     };
 
     const resizeObserver = new ResizeObserver(recalculateHeight);

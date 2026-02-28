@@ -38,7 +38,7 @@
 >
 	{#if item.bannerImage}
 		<div class="card__banner">
-			<img src={item.bannerImage} alt={item.title} />
+			<img src={item.thumbnailImage ?? item.bannerImage} alt={item.title} />
 		</div>
 	{/if}
 	<div class="card__content">
