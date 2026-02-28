@@ -4,7 +4,7 @@
   "version": "0.1.1",
   "packageManager": "pnpm@10.27.0",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro build & astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@astrojs/svelte": "^7.2.4",
-    "@blorkfield/overlay-core": "0.8.10",
+    "@blorkfield/overlay-core": "0.8.11",
     "astro": "^5.16.6",
     "svelte": "^5.46.1",
     "typescript": "^5.9.3"

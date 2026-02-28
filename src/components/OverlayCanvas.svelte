@@ -45,11 +45,6 @@
       despawnBelowFloor: 0.5
     });
 
-    canvas.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      scene?.setMousePosition(e.clientX - rect.left, e.clientY - rect.top);
-    });
-
     await scene.initializeFonts('/fonts/');
 
     // "Welcome to Blorkfield" - centered
@@ -108,25 +103,12 @@
       clickToFall: { clicks: 10 }
     });
 
-    // Calculate final height based on footer position
-    const footer = document.querySelector('.site-footer');
-    const wrapperRect = wrapper.getBoundingClientRect();
-
     // Minimum height needed to fit content
     const minContentHeight = boxY + boxRect.height / 2 + MIN_FLOOR_PADDING;
 
-    // Calculate height to align floor with footer top
-    let totalHeight = minContentHeight;
-    if (footer) {
-      const footerRect = footer.getBoundingClientRect();
-      const heightToFooter = footerRect.top - wrapperRect.top;
-      // Use the larger of content height or footer-aligned height
-      totalHeight = Math.max(minContentHeight, heightToFooter);
-    }
-
-    wrapper.style.height = `${totalHeight}px`;
-    canvas.height = totalHeight;
-    scene.resize(width, totalHeight);
+    wrapper.style.height = `${minContentHeight}px`;
+    canvas.height = minContentHeight;
+    scene.resize(width, minContentHeight);
 
     const rainConfig: RainEffectConfig = {
       id: 'rain',
@@ -153,19 +135,9 @@
       if (!scene || !container || !wrapper) return;
 
       const newWidth = container.clientWidth;
-      const newWrapperRect = wrapper.getBoundingClientRect();
-      const newFooter = document.querySelector('.site-footer');
-
-      let newHeight = minContentHeight;
-      if (newFooter) {
-        const newFooterRect = newFooter.getBoundingClientRect();
-        const heightToFooter = newFooterRect.top - newWrapperRect.top;
-        newHeight = Math.max(minContentHeight, heightToFooter);
-      }
-
-      wrapper.style.height = `${newHeight}px`;
-      canvas.height = newHeight;
-      scene.resize(newWidth, newHeight);
+      wrapper.style.height = `${minContentHeight}px`;
+      canvas.height = minContentHeight;
+      scene.resize(newWidth, minContentHeight);
     };
 
     const resizeObserver = new ResizeObserver(recalculateHeight);
@@ -204,7 +176,7 @@
   .overlay-wrapper {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    overflow: clip;
   }
 
   .overlay-container {
