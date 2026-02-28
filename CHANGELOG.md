@@ -1,5 +1,11 @@
 # blorkfield-homepage
 
+## 0.1.2
+
+### Patch Changes
+
+- 6d77c67: fix: scroll
+
 ## 0.1.1
 
 ### Patch Changes
