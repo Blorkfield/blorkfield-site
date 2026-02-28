@@ -45,11 +45,6 @@
       despawnBelowFloor: 0.5
     });
 
-    canvas.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      scene?.setMousePosition(e.clientX - rect.left, e.clientY - rect.top);
-    });
-
     await scene.initializeFonts('/fonts/');
 
     // "Welcome to Blorkfield" - centered

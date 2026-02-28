@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@astrojs/svelte": "^7.2.4",
-    "@blorkfield/overlay-core": "0.8.10",
+    "@blorkfield/overlay-core": "0.8.11",
     "astro": "^5.16.6",
     "svelte": "^5.46.1",
     "typescript": "^5.9.3"
