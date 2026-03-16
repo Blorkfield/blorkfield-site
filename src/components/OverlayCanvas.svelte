@@ -9,7 +9,6 @@
 
   // Layout constants
   const WELCOME_Y = 80;
-  const VERTICAL_GAP = 30;
   const MIN_FLOOR_PADDING = 60; // minimum space below content box
 
   onMount(async () => {
@@ -17,6 +16,11 @@
 
     const width = container.clientWidth;
     const centerX = width * 0.5;
+
+    // Scale text sizes to viewport — uncapped values are tuned for ~800px+
+    const letterSize = Math.round(Math.min(60, width * 0.073));
+    const buildFontSize = Math.round(Math.min(40, width * 0.055));
+    const VERTICAL_GAP = Math.round(Math.min(30, width * 0.04));
 
     // Create canvas with temporary height, will resize after calculating layout
     const canvas = document.createElement('canvas');
@@ -53,7 +57,7 @@
       x: centerX,
       y: WELCOME_Y,
       align: 'center',
-      letterSize: 60,
+      letterSize,
       pressureThreshold: { value: 9 },
       weight: { value: 10 },
       shadow: { opacity: 0.3 },
@@ -63,7 +67,6 @@
 
     // "Build Stuff" - left-aligned with Welcome text
     const robotoFont = scene.getAvailableFonts().find(f => f.name === 'Roboto');
-    const buildFontSize = 40;
     const buildY = welcomeResult.bounds.bottom + VERTICAL_GAP + (buildFontSize * 0.8);
     let buildBottom = buildY + buildFontSize * 0.2;
 
@@ -96,7 +99,7 @@
       y: boxY,
       width: boxRect.width,
       height: boxRect.height,
-      tags: ['content-obstacle', 'grabable'],
+      tags: ['content-obstacle', 'grabable', 'static'],
       pressureThreshold: { value: 100 },
       weight: 1000 ,
       shadow: { opacity: 0.3 },
