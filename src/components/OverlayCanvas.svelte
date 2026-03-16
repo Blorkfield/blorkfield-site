@@ -47,6 +47,7 @@
       bounds: { top: 0, bottom: initialHeight, left: 0, right: width },
       gravity: { x: 0, y: -1 },
       wrapHorizontal: true,
+      recenterOnResize: true,
       background: '#1a1b26',
       floorConfig: {
         segments: 3,
@@ -109,10 +110,16 @@
       height: boxRect.height,
       tags: ['content-obstacle', 'grabable', 'static'],
       pressureThreshold: { value: 100 },
-      weight: 1000 ,
+      weight: 1000,
       shadow: { opacity: 0.3 },
       clickToFall: { clicks: 10 }
     });
+
+    // overlay-core doesn't write transforms for static DOM elements on spawn —
+    // only when they become dynamic. Set the initial position manually using the
+    // same coordinate system (transform relative to left:0/top:0 origin).
+    contentBox.style.transform = `translate(${boxX - boxRect.width / 2}px, ${boxY - boxRect.height / 2}px)`;
+    contentBox.style.visibility = 'visible';
 
     // Minimum height needed to fit content (uses actual boxY from placement)
     const minContentHeight = boxY + boxRect.height / 2 + MIN_FLOOR_PADDING;
@@ -200,8 +207,8 @@
   .content-box {
     position: absolute;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    visibility: hidden;
     width: 500px;
     max-width: 90%;
     background: var(--bg-card);
