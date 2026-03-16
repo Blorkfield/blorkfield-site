@@ -22,20 +22,29 @@
     const buildFontSize = Math.round(Math.min(40, width * 0.055));
     const VERTICAL_GAP = Math.round(Math.min(30, width * 0.04));
 
-    // Create canvas with temporary height, will resize after calculating layout
+    const getAvailableHeight = () => {
+      const header = document.querySelector<HTMLElement>('.site-header');
+      const footer = document.querySelector<HTMLElement>('.site-footer');
+      return window.innerHeight - (header?.offsetHeight ?? 0) - (footer?.offsetHeight ?? 0);
+    };
+
+    // Calculate correct initial height before creating the scene.
+    // Estimate build text bottom using the same font math used during placement.
+    const boxRect = contentBox.getBoundingClientRect();
+    const estBuildBottom = WELCOME_Y + letterSize + VERTICAL_GAP + buildFontSize;
+    const estMinContentHeight = estBuildBottom + VERTICAL_GAP + boxRect.height + MIN_FLOOR_PADDING;
+    const initialHeight = Math.max(estMinContentHeight, getAvailableHeight());
+
     const canvas = document.createElement('canvas');
     canvas.width = width;
+    canvas.height = initialHeight;
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     container.appendChild(canvas);
-
-    // Use small initial height so resize() always EXPANDS bounds (not shrinks)
-    // overlay-core may not handle shrinking floor bounds correctly
-    const tempHeight = 100;
-    canvas.height = tempHeight;
+    wrapper.style.height = `${initialHeight}px`;
 
     scene = new OverlayScene(canvas, {
-      bounds: { top: 0, bottom: tempHeight, left: 0, right: width },
+      bounds: { top: 0, bottom: initialHeight, left: 0, right: width },
       gravity: { x: 0, y: -1 },
       wrapHorizontal: true,
       background: '#1a1b26',
@@ -89,7 +98,6 @@
     }
 
     // Content box - centered, below Build Stuff
-    const boxRect = contentBox.getBoundingClientRect();
     const boxX = centerX;
     const boxY = buildBottom + VERTICAL_GAP + boxRect.height / 2;
 
@@ -106,14 +114,8 @@
       clickToFall: { clicks: 10 }
     });
 
-    // Minimum height needed to fit content
+    // Minimum height needed to fit content (uses actual boxY from placement)
     const minContentHeight = boxY + boxRect.height / 2 + MIN_FLOOR_PADDING;
-
-    const getAvailableHeight = () => {
-      const header = document.querySelector<HTMLElement>('.site-header');
-      const footer = document.querySelector<HTMLElement>('.site-footer');
-      return window.innerHeight - (header?.offsetHeight ?? 0) - (footer?.offsetHeight ?? 0);
-    };
 
     const applyHeight = (w: number) => {
       const h = Math.max(minContentHeight, getAvailableHeight());
@@ -121,8 +123,6 @@
       canvas.height = h;
       scene!.resize(w, h);
     };
-
-    applyHeight(width);
 
     const rainConfig: RainEffectConfig = {
       id: 'rain',
