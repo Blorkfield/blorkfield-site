@@ -9,7 +9,6 @@
 
   // Layout constants
   const WELCOME_Y = 80;
-  const VERTICAL_GAP = 30;
   const MIN_FLOOR_PADDING = 60; // minimum space below content box
 
   onMount(async () => {
@@ -18,22 +17,37 @@
     const width = container.clientWidth;
     const centerX = width * 0.5;
 
-    // Create canvas with temporary height, will resize after calculating layout
+    // Scale text sizes to viewport — uncapped values are tuned for ~800px+
+    const letterSize = Math.round(Math.min(60, width * 0.073));
+    const buildFontSize = Math.round(Math.min(40, width * 0.055));
+    const VERTICAL_GAP = Math.round(Math.min(30, width * 0.04));
+
+    const getAvailableHeight = () => {
+      const header = document.querySelector<HTMLElement>('.site-header');
+      const footer = document.querySelector<HTMLElement>('.site-footer');
+      return window.innerHeight - (header?.offsetHeight ?? 0) - (footer?.offsetHeight ?? 0);
+    };
+
+    // Calculate correct initial height before creating the scene.
+    // Estimate build text bottom using the same font math used during placement.
+    const boxRect = contentBox.getBoundingClientRect();
+    const estBuildBottom = WELCOME_Y + letterSize + VERTICAL_GAP + buildFontSize;
+    const estMinContentHeight = estBuildBottom + VERTICAL_GAP + boxRect.height + MIN_FLOOR_PADDING;
+    const initialHeight = Math.max(estMinContentHeight, getAvailableHeight());
+
     const canvas = document.createElement('canvas');
     canvas.width = width;
+    canvas.height = initialHeight;
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     container.appendChild(canvas);
-
-    // Use small initial height so resize() always EXPANDS bounds (not shrinks)
-    // overlay-core may not handle shrinking floor bounds correctly
-    const tempHeight = 100;
-    canvas.height = tempHeight;
+    wrapper.style.height = `${initialHeight}px`;
 
     scene = new OverlayScene(canvas, {
-      bounds: { top: 0, bottom: tempHeight, left: 0, right: width },
-      gravity: 1,
+      bounds: { top: 0, bottom: initialHeight, left: 0, right: width },
+      gravity: { x: 0, y: -1 },
       wrapHorizontal: true,
+      recenterOnResize: true,
       background: '#1a1b26',
       floorConfig: {
         segments: 3,
@@ -53,7 +67,7 @@
       x: centerX,
       y: WELCOME_Y,
       align: 'center',
-      letterSize: 60,
+      letterSize,
       pressureThreshold: { value: 9 },
       weight: { value: 10 },
       shadow: { opacity: 0.3 },
@@ -63,7 +77,6 @@
 
     // "Build Stuff" - left-aligned with Welcome text
     const robotoFont = scene.getAvailableFonts().find(f => f.name === 'Roboto');
-    const buildFontSize = 40;
     const buildY = welcomeResult.bounds.bottom + VERTICAL_GAP + (buildFontSize * 0.8);
     let buildBottom = buildY + buildFontSize * 0.2;
 
@@ -86,7 +99,6 @@
     }
 
     // Content box - centered, below Build Stuff
-    const boxRect = contentBox.getBoundingClientRect();
     const boxX = centerX;
     const boxY = buildBottom + VERTICAL_GAP + boxRect.height / 2;
 
@@ -96,21 +108,21 @@
       y: boxY,
       width: boxRect.width,
       height: boxRect.height,
-      tags: ['content-obstacle', 'grabable'],
+      tags: ['content-obstacle', 'grabable', 'static'],
       pressureThreshold: { value: 100 },
-      weight: 1000 ,
+      weight: 1000,
       shadow: { opacity: 0.3 },
       clickToFall: { clicks: 10 }
     });
 
-    // Minimum height needed to fit content
-    const minContentHeight = boxY + boxRect.height / 2 + MIN_FLOOR_PADDING;
+    // overlay-core doesn't write transforms for static DOM elements on spawn —
+    // only when they become dynamic. Set the initial position manually using the
+    // same coordinate system (transform relative to left:0/top:0 origin).
+    contentBox.style.transform = `translate(${boxX - boxRect.width / 2}px, ${boxY - boxRect.height / 2}px)`;
+    contentBox.style.visibility = 'visible';
 
-    const getAvailableHeight = () => {
-      const header = document.querySelector<HTMLElement>('.site-header');
-      const footer = document.querySelector<HTMLElement>('.site-footer');
-      return window.innerHeight - (header?.offsetHeight ?? 0) - (footer?.offsetHeight ?? 0);
-    };
+    // Minimum height needed to fit content (uses actual boxY from placement)
+    const minContentHeight = boxY + boxRect.height / 2 + MIN_FLOOR_PADDING;
 
     const applyHeight = (w: number) => {
       const h = Math.max(minContentHeight, getAvailableHeight());
@@ -118,8 +130,6 @@
       canvas.height = h;
       scene!.resize(w, h);
     };
-
-    applyHeight(width);
 
     const rainConfig: RainEffectConfig = {
       id: 'rain',
@@ -197,8 +207,8 @@
   .content-box {
     position: absolute;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    visibility: hidden;
     width: 500px;
     max-width: 90%;
     background: var(--bg-card);
