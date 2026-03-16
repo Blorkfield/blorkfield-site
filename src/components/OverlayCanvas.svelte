@@ -32,7 +32,7 @@
 
     scene = new OverlayScene(canvas, {
       bounds: { top: 0, bottom: tempHeight, left: 0, right: width },
-      gravity: 1,
+      gravity: { x: 0, y: -1 },
       wrapHorizontal: true,
       background: '#1a1b26',
       floorConfig: {
