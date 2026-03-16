@@ -1,5 +1,11 @@
 # blorkfield-homepage
 
+## 0.1.4
+
+### Patch Changes
+
+- 602c5d9: fix: mobile
+
 ## 0.1.3
 
 ### Patch Changes
