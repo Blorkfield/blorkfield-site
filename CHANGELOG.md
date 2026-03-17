@@ -1,5 +1,11 @@
 # blorkfield-homepage
 
+## 0.1.5
+
+### Patch Changes
+
+- 6543c53: fix: mobile display
+
 ## 0.1.4
 
 ### Patch Changes
