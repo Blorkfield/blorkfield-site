@@ -108,7 +108,7 @@
       y: boxY,
       width: boxRect.width,
       height: boxRect.height,
-      tags: ['content-obstacle', 'grabable', 'static'],
+      tags: ['content-obstacle', 'static'],
       pressureThreshold: { value: 100 },
       weight: 1000,
       shadow: { opacity: 0.3 },
