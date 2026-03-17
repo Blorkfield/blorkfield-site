@@ -115,10 +115,6 @@
       clickToFall: { clicks: 10 }
     });
 
-    // overlay-core doesn't write transforms for static DOM elements on spawn —
-    // only when they become dynamic. Set the initial position manually using the
-    // same coordinate system (transform relative to left:0/top:0 origin).
-    contentBox.style.transform = `translate(${boxX - boxRect.width / 2}px, ${boxY - boxRect.height / 2}px)`;
     contentBox.style.visibility = 'visible';
 
     // Minimum height needed to fit content (uses actual boxY from placement)
