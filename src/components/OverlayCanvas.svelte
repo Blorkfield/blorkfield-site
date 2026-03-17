@@ -51,7 +51,7 @@
       background: '#1a1b26',
       floorConfig: {
         segments: 3,
-        threshold: 100,
+        threshold: 40,
         thickness: 50,
         visibleThickness: 4,
         color: '#565f89'
