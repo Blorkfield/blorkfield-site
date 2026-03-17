@@ -51,7 +51,7 @@
       background: '#1a1b26',
       floorConfig: {
         segments: 3,
-        threshold: 100,
+        threshold: 40,
         thickness: 50,
         visibleThickness: 4,
         color: '#565f89'
@@ -108,7 +108,7 @@
       y: boxY,
       width: boxRect.width,
       height: boxRect.height,
-      tags: ['content-obstacle', 'grabable', 'static'],
+      tags: ['content-obstacle', 'static'],
       pressureThreshold: { value: 100 },
       weight: 1000,
       shadow: { opacity: 0.3 },
