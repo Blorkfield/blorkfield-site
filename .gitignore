@@ -5,6 +5,7 @@ dist/
 
 # AI
 CLAUDE.md
+memory/
 
 # dependencies
 node_modules/
