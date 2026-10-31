@@ -1,5 +1,11 @@
 # blorkfield-homepage
 
+## 0.1.6
+
+### Patch Changes
+
+- 9499f2b: chore: machine handoff 2026 10 31
+
 ## 0.1.5
 
 ### Patch Changes
