@@ -189,7 +189,7 @@
   .overlay-wrapper {
     position: relative;
     width: 100%;
-    overflow: clip;
+    overflow: hidden;
   }
 
   .overlay-container {
