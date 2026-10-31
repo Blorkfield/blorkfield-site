@@ -1,5 +1,11 @@
 # blorkfield-homepage
 
+## 0.1.7
+
+### Patch Changes
+
+- f1bf5b8: chore: machine handoff 2026 10 31
+
 ## 0.1.6
 
 ### Patch Changes
